@@ -67,24 +67,12 @@ cd Student_Routine_Optimizer
 🖥️ Backend Setup
 cd backend
 npm install
-
-
-If you don't use .env, configure DB directly:
-
-host: "localhost",
-user: "root",
-password: "your_password",
-database: "student_optimizer",
-
-
-Start backend:
-
-npm start
+node /src/index.js
 
 🌐 Frontend Setup
 cd frontend
 npm install
-npm start
+npm run dev
 
 Default URLs
 
