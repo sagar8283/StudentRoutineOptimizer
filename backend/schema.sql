@@ -1,18 +1,35 @@
-CREATE TABLE IF NOT EXISTS tasks (
+-- USERS TABLE
+CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(255),
-  duration INT,
-  deadline DATETIME,
-  priority VARCHAR(50),
-  category VARCHAR(50),
+  username VARCHAR(100) UNIQUE NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS routines (
+-- TASKS TABLE
+CREATE TABLE tasks (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  sleep_hours INT,
-  study_hours INT,
-  screen_time INT,
+  user_id INT NOT NULL,
+  title VARCHAR(255),
+  description TEXT,
+  duration INT,
+  priority INT,
+  category VARCHAR(100),
   date DATE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- ROUTINE TABLE
+CREATE TABLE routine (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  task_id INT NOT NULL,
+  start_time DATETIME,
+  end_time DATETIME,
+  day VARCHAR(20),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
