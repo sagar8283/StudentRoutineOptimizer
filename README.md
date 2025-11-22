@@ -61,7 +61,7 @@ Student_Routine_Optimizer/
 
 ⚙️ Installation Guide
 1️⃣ Clone the Repository
-git clone https://github.com/YOUR_USERNAME/Student_Routine_Optimizer.git
+git clone https://github.com/Shrirakshgd/Student_Routine_optimizer.git
 cd Student_Routine_Optimizer
 
 🖥️ Backend Setup
