@@ -1,5 +1,7 @@
 {
   "/": "pages/index.js",
   "/_app": "pages/_app.js",
-  "/_document": "pages/_document.js"
+  "/_document": "pages/_document.js",
+  "/login": "pages/login.js",
+  "/logout": "pages/logout.js"
 }

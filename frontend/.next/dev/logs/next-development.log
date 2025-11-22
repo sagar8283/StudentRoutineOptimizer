@@ -1,27 +1,5 @@
-[00:00:01.268] Server  LOG      ✓ Ready in 818ms
-[00:00:03.344] Browser WARN    Non-JSON from server: <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Error</title>
-</head>
-<body>
-<pre>Cannot GET /api/analytics/daily/2</pre>
-</body>
-</html>
-
-[00:00:06.054] Browser WARN    Non-JSON from server: <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Error</title>
-</head>
-<body>
-<pre>Cannot GET /api/analytics/daily/2</pre>
-</body>
-</html>
-
-[00:00:16.624] Browser WARN    Non-JSON from server: <!DOCTYPE html>
+[00:00:01.150] Server  LOG      ✓ Ready in 724ms
+[00:00:09.986] Browser WARN    Non-JSON from server: <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">

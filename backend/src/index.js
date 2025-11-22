@@ -15,7 +15,6 @@ const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-const path = require('path');
 app.use('/static', express.static(path.join(__dirname, '..', 'public')));
 
 
