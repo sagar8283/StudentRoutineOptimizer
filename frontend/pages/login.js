@@ -1,4 +1,3 @@
-// pages/login.js
 import Head from 'next/head';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -10,6 +9,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('');
   const [loading, setLoading] = useState(false);
+  const [remember, setRemember] = useState(false);
 
   async function safeFetchJSON(res) {
     const text = await res.text();
