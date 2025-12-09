@@ -12,29 +12,16 @@ export default function TaskForm({ userId = 1, onCreated = () => {} }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Try to read settings from provider (wrapped in try so no crash)
   let settings = null;
   try {
-    const ctx = useSettings();
-    settings = ctx.settings;
-  } catch (err) {
-    // provider missing → fallback
+    settings = useSettings().settings;
+  } catch {
     settings = null;
   }
 
-  // Apply defaultDuration from SettingsModal
   useEffect(() => {
-    if (settings && settings.defaultDuration) {
+    if (settings?.defaultDuration) {
       setDurationMinutes(settings.defaultDuration);
-    } else {
-      // fallback to localStorage (old logic)
-      try {
-        const raw = localStorage.getItem("app_settings");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (parsed.defaultDuration) setDurationMinutes(parsed.defaultDuration);
-        }
-      } catch {}
     }
   }, [settings]);
 
@@ -46,18 +33,12 @@ export default function TaskForm({ userId = 1, onCreated = () => {} }) {
     setCategory("");
   }
 
-  // Safe JSON parser
   async function safeParse(res) {
     const text = await res.text();
     try {
       return text ? JSON.parse(text) : {};
-    } catch (err) {
-      throw new Error(
-        `Server returned non-JSON data (status ${res.status}):\n\n${text.slice(
-          0,
-          2000
-        )}`
-      );
+    } catch {
+      throw new Error(`Server returned non-JSON (status ${res.status}):\n${text}`);
     }
   }
 
@@ -90,56 +71,56 @@ export default function TaskForm({ userId = 1, onCreated = () => {} }) {
       });
 
       const json = await safeParse(res);
-
-      if (!res.ok) {
-        throw new Error(json.error || json.message || `Status ${res.status}`);
-      }
+      if (!res.ok) throw new Error(json.error || json.message);
 
       resetForm();
       onCreated(json);
     } catch (err) {
-      console.error("TaskForm create error:", err);
-      setError(err.message || "Error creating task");
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded shadow text-gray-900 dark:text-gray-100">
-      <h4 className="font-semibold mb-3">Create Task</h4>
+    <div className="p-5 rounded-xl bg-[#041018]/60 border border-fuchsia-600 neon-panel shadow-xl">
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        {/* Title */}
+      <h4 className="text-fuchsia-300 font-semibold mb-4 neon-text tracking-wide">
+        Create Task
+      </h4>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+
+        {/* TITLE */}
         <div>
-          <label className="block text-sm">Title</label>
+          <label className="cyber-label">Title</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="What do you need to do?"
-            className="mt-1 w-full border p-2 rounded dark:bg-gray-700"
+            className="cyber-input"
           />
         </div>
 
-        {/* Duration + Priority */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* DURATION + PRIORITY */}
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm">Duration (min)</label>
+            <label className="cyber-label">Duration (min)</label>
             <input
               type="number"
               min={5}
               value={durationMinutes}
               onChange={(e) => setDurationMinutes(e.target.value)}
-              className="mt-1 w-full border p-2 rounded dark:bg-gray-700"
+              className="cyber-input"
             />
           </div>
 
           <div>
-            <label className="block text-sm">Priority</label>
+            <label className="cyber-label">Priority</label>
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
-              className="mt-1 w-full border p-2 rounded dark:bg-gray-700"
+              className="cyber-input"
             >
               <option value="">—</option>
               <option value="high">High</option>
@@ -149,50 +130,121 @@ export default function TaskForm({ userId = 1, onCreated = () => {} }) {
           </div>
         </div>
 
-        {/* Deadline */}
+        {/* DEADLINE */}
         <div>
-          <label className="block text-sm">Deadline (optional)</label>
+          <label className="cyber-label">Deadline (optional)</label>
           <input
             type="datetime-local"
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
-            className="mt-1 w-full border p-2 rounded dark:bg-gray-700"
+            className="cyber-input"
           />
         </div>
 
-        {/* Category */}
+        {/* CATEGORY */}
         <div>
-          <label className="block text-sm">Category</label>
+          <label className="cyber-label">Category</label>
           <input
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             placeholder="e.g., Study, Exercise"
-            className="mt-1 w-full border p-2 rounded dark:bg-gray-700"
+            className="cyber-input"
           />
         </div>
 
-        {error && (
-          <div className="text-sm text-red-500 whitespace-pre-wrap">{error}</div>
-        )}
+        {/* ERROR */}
+        {error && <div className="text-red-400 text-sm">{error}</div>}
 
-        <div className="flex gap-2">
+        {/* BUTTONS */}
+        <div className="flex gap-3 pt-2">
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 bg-indigo-600 text-white rounded"
+            className="cyber-btn-pink flex-1"
           >
-            {loading ? "Saving..." : "Save Task"}
+            {loading ? "Saving…" : "Save Task"}
           </button>
 
           <button
             type="button"
             onClick={resetForm}
-            className="px-3 py-2 border rounded"
+            className="cyber-btn flex-1"
           >
             Reset
           </button>
         </div>
+
       </form>
+
+      {/* CYBERPUNK STYLES */}
+      <style jsx>{`
+        .neon-panel {
+          backdrop-filter: blur(8px);
+          box-shadow:
+            inset 0 0 25px #ff2dfc33,
+            0 0 30px #ff2dfc44;
+        }
+
+        .neon-text {
+          text-shadow: 0 0 6px #ff2dfc88, 0 0 14px #00eaff88;
+        }
+
+        .cyber-label {
+          display: block;
+          font-size: 0.875rem;
+          color: #ffbaff;
+          margin-bottom: 3px;
+        }
+
+        .cyber-input {
+          width: 100%;
+          padding: 10px;
+          background: #020c14;
+          border: 1px solid #ff2dfc88;
+          color: #e8c9ff;
+          border-radius: 6px;
+          box-shadow: inset 0 0 12px #ff2dfc33;
+          transition: 0.15s;
+        }
+
+        .cyber-input:focus {
+          outline: none;
+          box-shadow:
+            inset 0 0 18px #ff2dfc66,
+            0 0 12px #ff2dfc44;
+        }
+
+        .cyber-btn {
+          padding: 10px;
+          background: #021018;
+          border: 1px solid #00eaff99;
+          color: #8af4ff;
+          font-weight: bold;
+          border-radius: 6px;
+          transition: 0.2s;
+          box-shadow: 0 0 12px #00eaff55;
+        }
+
+        .cyber-btn:hover {
+          background: #00eaff22;
+          transform: translateY(-2px);
+        }
+
+        .cyber-btn-pink {
+          padding: 10px;
+          background: linear-gradient(to right, #ff2dfc, #00eaff);
+          color: black;
+          font-weight: bold;
+          border-radius: 6px;
+          box-shadow: 0 0 22px #ff2dfc88, 0 0 22px #00eaff88;
+          transition: 0.2s;
+        }
+
+        .cyber-btn-pink:hover {
+          opacity: 0.9;
+          transform: translateY(-2px);
+        }
+      `}</style>
     </div>
   );
 }
